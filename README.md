@@ -1,4 +1,4 @@
-# url-shorteneer
+# url-shortener
 
 Basit ve hızlı URL kısaltma servisi.
 

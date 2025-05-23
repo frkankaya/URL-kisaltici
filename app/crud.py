@@ -1,22 +1,22 @@
 import string
 import random
+from sqlalchemy.orm import Session
+from models import URL
 
-db = {}
+def generate_short_url(length: int = 6):
+    chars = string.ascii_letters + string.digits  # a-zA-Z0-9
+    return ''.join(random.choices(chars, k=length))
 
-def generate_short_code(length=6):
-    chars = string.ascii_letters + string.digits
+def create_url(db: Session, original_url: str):
+    short_url = generate_short_url()
+    db_url = URL(original_url=original_url, short_url=short_url)
+    db.add(db_url)
+    db.commit()
+    db.refresh(db_url)
+    return db_url
 
-    while True:
-        code = ''.join(random.choice(chars) for i in range(length))
+def get_url_by_short(db: Session, short_url: str):
+    return db.query(URL).filter(URL.short_url == short_url).first()
 
-        if code not in db:
-            return code
-        
-def shorten_url(url: str):
-    code = generate_short_code()
-
-    db[code] = url
-    return code
-
-def get_url(code: str):
-    return db.get(code)
+def get_url_by_original(db: Session, original_url: str):
+    return db.query(URL).filter(URL.original_url == original_url).first()
