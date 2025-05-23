@@ -1,7 +1,7 @@
 import string
 import random
 from sqlalchemy.orm import Session
-from models import URL
+from app.models import URL
 
 def generate_short_url(length: int = 6):
     chars = string.ascii_letters + string.digits  # a-zA-Z0-9
