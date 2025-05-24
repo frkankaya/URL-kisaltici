@@ -4,6 +4,7 @@ from app.schemas import URLItem
 from app.crud import create_url, get_url_by_short
 from app.database import SessionLocal
 from sqlalchemy.orm import Session
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -25,3 +26,11 @@ def redirect_url(code: str, db: Session = Depends(get_db)):
     if url:
         return RedirectResponse(url.original_url)
     raise HTTPException(status_code=404, detail="Short URL is not found.")
+
+app.add_middleware(
+    CORSMiddleware, 
+    allow_origins=["http://localhost:3000"], 
+    allow_credentials=True, 
+    allow_methods=["*"], 
+    allow_headers=["*"]
+)
